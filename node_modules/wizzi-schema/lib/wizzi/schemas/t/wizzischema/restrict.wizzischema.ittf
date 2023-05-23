@@ -1,0 +1,37 @@
+﻿$group
+
+	e restrict : schemaitem
+		# Group of restrictions to the element or attribute values
+		r facet/s
+	
+	e facet : schemaitem
+		# The abstract base class for facet restrictions
+		is-abstract
+	
+	e enumFacet : facet
+		# A restriction of type enumeration applied to an attribute.
+		tag enum
+	
+	e maxLengthFacet : facet
+		# A restriction of type maximum length applied to an attribute.
+		tag max-length
+	
+	e minLengthFacet : facet
+		# A restriction of type minimum length applied to an attribute.
+		tag min-length
+	
+	e maxValueFacet : facet
+		# A restriction of type maximum value applied to an attribute.
+		tag max-value
+	
+	e minValueFacet : facet
+		# A restriction of type minimum value applied to an attribute.
+		tag min-value
+
+	e regexpFacet : facet
+		# A restriction of type regexp test applied to an attribute.
+		tag regexp
+
+	e elementFacet : facet
+		# A restriction of type allowed child element applied to an element.
+		tag element

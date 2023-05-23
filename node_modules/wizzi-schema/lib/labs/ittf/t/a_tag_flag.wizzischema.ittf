@@ -1,0 +1,6 @@
+﻿a ${name}
+	$params name, tag, defaultValue|false
+	tag ${tag}
+	type boolean
+	default ${defaultValue}
+	default-when-declared true

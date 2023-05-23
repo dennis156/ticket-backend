@@ -1,0 +1,12 @@
+﻿$group
+
+	e relation : schemaitem
+		# A relation to a child element.
+		# By default is a one-to-many relation. 
+		# Can be set to a one-to-one, declaring the attribute isOneToOne.
+		
+		tag r
+		
+		a_tag_flag( isOneToOne, one-to-one )
+		a_tag_flag( noGetMethod, no-get )
+		a_tag_flag( hasAddOnce, add-once )

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .pagination button {
+            margin: 0 5px;
+            border: none;
+            padding: 5px 10px;
+        }
+
+        .pagination .active {
+            font-weight: bold;
+        }
+    </style>
+
+    <title>Restaurant</title>
+</head>
+
+<body>
+    <nav class="container navbar py-4 col-md-12 navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Logo</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Agregar</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Editar</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Eliminar</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Buscar</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- <div class="container">
+        <h1>Crud de Restaurantes MongoDB</h1>
+    </div> -->
+
+
+    <div class="container col-md-12">
+        <div class="background-image col-md-6   ">
+            <div class="background-overlay"></div>
+            <!-- <h1 class="text-white">¡Bienvenido a nuestro sitio web!</h1> -->
+        </div>
+    </div>
+    <table class="container" id="restaurantTable"></table>
+    <div class="pagination" id="pagination"></div>
+    <script>
+        const pageSize = 8; // Número de registros por página
+        let currentPage = 1;
+        let totalPageCount = 0;
+        let restaurantData = [];
+
+        const restaurantTable = document.getElementById('restaurantTable');
+        const paginationContainer = document.getElementById('pagination');
+
+        function renderTable() {
+            // Limpiar la tabla antes de renderizar los datos
+            restaurantTable.innerHTML = '';
+
+            const startIndex = (currentPage - 1) * pageSize;
+            const endIndex = startIndex + pageSize;
+            const currentData = restaurantData.slice(startIndex, endIndex);
+
+            currentData.forEach(restaurant => {
+                const row = document.createElement('tr');
+
+                const nameCell = document.createElement('td');
+                nameCell.innerHTML = restaurant.name;
+                row.appendChild(nameCell);
+
+                const boroughCell = document.createElement('td');
+                boroughCell.innerHTML = restaurant.borough;
+                row.appendChild(boroughCell);
+
+                const cuisineCell = document.createElement('td');
+                cuisineCell.innerHTML = restaurant.cuisine;
+                row.appendChild(cuisineCell);
+
+                const addressCell = document.createElement('td');
+                addressCell.innerHTML =
+                    `${restaurant.address.building}, ${restaurant.address.street}, ${restaurant.address.zipcode}`;
+                row.appendChild(addressCell);
+
+                const gradesCell = document.createElement('td');
+                const gradesList = document.createElement('ul');
+                restaurant.grades.forEach(grade => {
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML =
+                        `Date: ${grade.date}, Grade: ${grade.grade}, Score: ${grade.score}`;
+                    gradesList.appendChild(listItem);
+                });
+                gradesCell.appendChild(gradesList);
+                row.appendChild(gradesCell);
+
+                restaurantTable.appendChild(row);
+            });
+
+            updatePagination();
+        }
+
+        function updatePagination() {
+            const totalPages = Math.ceil(restaurantData.length / pageSize);
+            totalPageCount = totalPages;
+
+            paginationContainer.innerHTML = '';
+
+            let startPage = 1;
+            let endPage = totalPages;
+
+            if (totalPages > 5) {
+                if (currentPage <= 3) {
+                    endPage = 5;
+                } else if (currentPage >= totalPages - 2) {
+                    startPage = totalPages - 4;
+                } else {
+                    startPage = currentPage - 2;
+                    endPage = currentPage + 2;
+                }
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                const button = document.createElement('button');
+                button.textContent = i;
+                button.addEventListener('click', () => {
+                    currentPage = i;
+                    renderTable();
+                });
+
+                if (i === currentPage) {
+                    button.classList.add('active');
+                }
+
+                paginationContainer.appendChild(button);
+            }
+
+            if (totalPages > 5) {
+                if (currentPage >= 4 && currentPage <= totalPages - 3) {
+                    const dotsStart = document.createElement('span');
+                    dotsStart.classList.add('dots');
+                    dotsStart.textContent = '...';
+                    paginationContainer.insertBefore(dotsStart, paginationContainer.children[1]);
+
+                    const dotsEnd = document.createElement('span');
+                    dotsEnd.classList.add('dots');
+                    dotsEnd.textContent = '...';
+                    paginationContainer.insertBefore(dotsEnd, paginationContainer.children[paginationContainer.children
+                        .length - 1]);
+                }
+            }
+
+            if (totalPages > 1) {
+                const button = document.createElement('button');
+                button.textContent = totalPages;
+                button.addEventListener('click', () => {
+                    currentPage = totalPages;
+                    renderTable();
+                });
+
+                if (currentPage === totalPages) {
+                    button.classList.add('active');
+                }
+
+                paginationContainer.appendChild(button);
+            }
+        }
+
+        fetch('http://localhost:3000/restaurant')
+            .then(response => response.json())
+            .then(data => {
+                restaurantData = data;
+                renderTable();
+            })
+            .catch(error => {
+                console.log('Error:', error);
+            });
+    </script>
+    <script src="./js/bootstrap.min.js"></script>
+</body>
+
+</html>
