@@ -7,36 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/bootstrap.min.css">
     <link rel="stylesheet" href="../assets/css/style.css">
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th,
-        td {
-            padding: 8px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .pagination {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-            margin-bottom: 20px;
-        }
-
-        .pagination button {
-            margin: 0 5px;
-            border: none;
-            padding: 5px 10px;
-        }
-
-        .pagination .active {
-            font-weight: bold;
-        }
-    </style>
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/img/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/img/favicon/favicon-16x16.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer"
+    />
 
     <title>Restaurant</title>
 </head>
@@ -44,32 +19,19 @@
 <body>
     <nav class="container navbar py-4 col-md-12 navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="#">Logo</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Agregar</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Editar</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Eliminar</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Buscar</a>
-                </li>
+
             </ul>
+            <form class="d-flex" role="search">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
         </div>
     </nav>
-
-    <!-- <div class="container">
-        <h1>Crud de Restaurantes MongoDB</h1>
-    </div> -->
-
 
     <div class="container col-md-12">
         <div class="background-image col-md-6   ">
@@ -77,137 +39,119 @@
             <!-- <h1 class="text-white">¡Bienvenido a nuestro sitio web!</h1> -->
         </div>
     </div>
+
+    <!-- Button trigger modal -->
+    <div class="my-4 justify-content-center d-flex container">
+        <button type="button" class="btn btn-primary" id="OpenDataModal" data-bs-toggle="modal" data-bs-target="#exampleModal">Agregar Nuevo Restaurante a la tabla</button>
+    </div>
     <table class="container" id="restaurantTable"></table>
     <div class="pagination" id="pagination"></div>
-    <script>
-        const pageSize = 8; // Número de registros por página
-        let currentPage = 1;
-        let totalPageCount = 0;
-        let restaurantData = [];
 
-        const restaurantTable = document.getElementById('restaurantTable');
-        const paginationContainer = document.getElementById('pagination');
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-dark">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Agrega los datos del nuevo restaurante</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <form id="myForm" action="tu_url_de_destino" method="POST">
+                            <label for="building">Building:</label>
+                            <input type="text" id="building" name="address[building]" required><br><br>
 
-        function renderTable() {
-            // Limpiar la tabla antes de renderizar los datos
-            restaurantTable.innerHTML = '';
+                            <label for="coord">Coord:</label>
+                            <input type="text" id="coord1" name="address[coord][]" required>
+                            <input type="text" id="coord2" name="address[coord][]" required><br><br>
 
-            const startIndex = (currentPage - 1) * pageSize;
-            const endIndex = startIndex + pageSize;
-            const currentData = restaurantData.slice(startIndex, endIndex);
+                            <label for="street">Street:</label>
+                            <input type="text" id="street" name="address[street]" required><br><br>
 
-            currentData.forEach(restaurant => {
-                const row = document.createElement('tr');
+                            <label for="zipcode">Zipcode:</label>
+                            <input type="text" id="zipcode" name="address[zipcode]" required><br><br>
 
-                const nameCell = document.createElement('td');
-                nameCell.innerHTML = restaurant.name;
-                row.appendChild(nameCell);
+                            <label for="borough">Borough:</label>
+                            <input type="text" id="borough" name="borough" required><br><br>
 
-                const boroughCell = document.createElement('td');
-                boroughCell.innerHTML = restaurant.borough;
-                row.appendChild(boroughCell);
+                            <label for="cuisine">Cuisine:</label>
+                            <input type="text" id="cuisine" name="cuisine" required><br><br>
 
-                const cuisineCell = document.createElement('td');
-                cuisineCell.innerHTML = restaurant.cuisine;
-                row.appendChild(cuisineCell);
+                            <label for="grades">Grades:</label><br>
+                            <label>Date:</label>
+                            <input type="text" id="date" name="grades[0][date]" required>
+                            <label>Grade:</label>
+                            <input type="text" id="grade" name="grades[0][grade]" required>
+                            <label>Score:</label>
+                            <input type="text" id="score" name="grades[0][score]" required><br>
 
-                const addressCell = document.createElement('td');
-                addressCell.innerHTML =
-                    `${restaurant.address.building}, ${restaurant.address.street}, ${restaurant.address.zipcode}`;
-                row.appendChild(addressCell);
+                            <label for="name">Name:</label>
+                            <input type="text" id="name" name="name" required><br><br>
 
-                const gradesCell = document.createElement('td');
-                const gradesList = document.createElement('ul');
-                restaurant.grades.forEach(grade => {
-                    const listItem = document.createElement('li');
-                    listItem.innerHTML =
-                        `Date: ${grade.date}, Grade: ${grade.grade}, Score: ${grade.score}`;
-                    gradesList.appendChild(listItem);
-                });
-                gradesCell.appendChild(gradesList);
-                row.appendChild(gradesCell);
+                        </form>
 
-                restaurantTable.appendChild(row);
-            });
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="btnSendData">Enviar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            updatePagination();
-        }
+    <!-- Modal de edicion -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-dark">
+                    <h1 class="modal-title fs-5" id="editModalLabel">Editar Restaurante</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editForm">
+                        <label for="building">Building:</label>
+                        <input type="text" id="Editbuilding" name="address[building]" required><br><br>
 
-        function updatePagination() {
-            const totalPages = Math.ceil(restaurantData.length / pageSize);
-            totalPageCount = totalPages;
+                        <label for="coord">Coord:</label>
+                        <input type="text" id="Editcoord1" name="address[coord][]" required>
+                        <input type="text" id="Editcoord2" name="address[coord][]" required><br><br>
 
-            paginationContainer.innerHTML = '';
+                        <label for="street">Street:</label>
+                        <input type="text" id="Editstreet" name="address[street]" required><br><br>
 
-            let startPage = 1;
-            let endPage = totalPages;
+                        <label for="zipcode">Zipcode:</label>
+                        <input type="text" id="Editzipcode" name="address[zipcode]" required><br><br>
 
-            if (totalPages > 5) {
-                if (currentPage <= 3) {
-                    endPage = 5;
-                } else if (currentPage >= totalPages - 2) {
-                    startPage = totalPages - 4;
-                } else {
-                    startPage = currentPage - 2;
-                    endPage = currentPage + 2;
-                }
-            }
+                        <label for="borough">Borough:</label>
+                        <input type="text" id="Editborough" name="borough" required><br><br>
 
-            for (let i = startPage; i <= endPage; i++) {
-                const button = document.createElement('button');
-                button.textContent = i;
-                button.addEventListener('click', () => {
-                    currentPage = i;
-                    renderTable();
-                });
+                        <label for="cuisine">Cuisine:</label>
+                        <input type="text" id="Editcuisine" name="cuisine" required><br><br>
 
-                if (i === currentPage) {
-                    button.classList.add('active');
-                }
+                        <label for="date">Date:</label>
+                        <input type="text" id="Editdate" name="grades[0][date]" required><br><br>
 
-                paginationContainer.appendChild(button);
-            }
+                        <label for="grade">Grade:</label>
+                        <input type="text" id="Editgrade" name="grades[0][grade]" required><br><br>
 
-            if (totalPages > 5) {
-                if (currentPage >= 4 && currentPage <= totalPages - 3) {
-                    const dotsStart = document.createElement('span');
-                    dotsStart.classList.add('dots');
-                    dotsStart.textContent = '...';
-                    paginationContainer.insertBefore(dotsStart, paginationContainer.children[1]);
+                        <label for="score">Score:</label>
+                        <input type="text" id="Editscore" name="grades[0][score]" required><br><br>
 
-                    const dotsEnd = document.createElement('span');
-                    dotsEnd.classList.add('dots');
-                    dotsEnd.textContent = '...';
-                    paginationContainer.insertBefore(dotsEnd, paginationContainer.children[paginationContainer.children
-                        .length - 1]);
-                }
-            }
+                        <label for="name">Name:</label>
+                        <input type="text" id="Editname" name="name" required><br><br>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" id="saveChangesButton">Guardar Cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            if (totalPages > 1) {
-                const button = document.createElement('button');
-                button.textContent = totalPages;
-                button.addEventListener('click', () => {
-                    currentPage = totalPages;
-                    renderTable();
-                });
 
-                if (currentPage === totalPages) {
-                    button.classList.add('active');
-                }
-
-                paginationContainer.appendChild(button);
-            }
-        }
-
-        fetch('http://localhost:3000/restaurant')
-            .then(response => response.json())
-            .then(data => {
-                restaurantData = data;
-                renderTable();
-            })
-            .catch(error => {
-                console.log('Error:', error);
-            });
+    <script src="../js/app.js">
     </script>
     <script src="./js/bootstrap.min.js"></script>
 </body>

@@ -7,9 +7,9 @@ router.get('/', function(req, res) {
     RestaurantController.getrestaurants(req, res);
 });
 
-// router.get('/:id', function(req, res) {
-//     RestaurantController.searchrestaurant(req, res);
-// });
+router.get('/:id', function(req, res) {
+    RestaurantController.searchrestaurant(req, res);
+});
 
 router.post('/search-by-email/:email', function(req, res) {
     RestaurantController.SearchrestaurantByEmail(req, res);
