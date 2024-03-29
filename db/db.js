@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 
 // const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/ChatOnline_Users';
-const user = 'jaime';
-const password = 'Jamesjuarez27';
+const user = 'dennis';
+const password = 'setoxxdlover01';
 const dbName = 'Restaurant';
-const MONGODB_URI = process.env.MONGODB_URI || `mongodb+srv://${user}:${password}@cluster0.zs5j7rn.mongodb.net/${dbName}?retryWrites=true&w=majority`;
+const MONGODB_URI = process.env.MONGODB_URI || `mongodb+srv://setoxxD:cjn048NJeuojjELa@cluster0.ilurmhe.mongodb.net/?retryWrites=true&w=majority`;
 
 const connection = () => {
     mongoose.set('strictQuery', false);

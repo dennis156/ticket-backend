@@ -1,8 +1,0 @@
-﻿$group
-
-	$if comments.length > 1
-		#
-			$foreach c in comments
-				# ${c.wzName}
-	$elif comments.length == 1
-		# ${ comments[0].wzName }

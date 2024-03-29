@@ -38,7 +38,7 @@ module.exports = {
                         return res.status(201).json(savedRestaurant);
                     })
                     .catch(err => {
-                        console.log(err); // Agregar esta línea para obtener más información sobre el error
+                        console.log(err); // da informacion del error
                         return res.status(500).json({
                             message: 'Error when creating restaurant',
                             error: err
@@ -46,7 +46,7 @@ module.exports = {
                     });
             })
             .catch(err => {
-                console.log(err); // Agregar esta línea para obtener más información sobre el error
+                console.log(err); // info del error
                 return res.status(500).json({
                     message: 'Error creating restaurant',
                     error: err
